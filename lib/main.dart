@@ -1,6 +1,5 @@
-
-import 'package:dicoding_news_app/model/article.dart';
-import 'package:dicoding_news_app/pages/detail_page.dart';
+import 'package:dicoding_news_app/data/model/article.dart';
+import 'package:dicoding_news_app/ui/detail_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
