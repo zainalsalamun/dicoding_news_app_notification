@@ -1,5 +1,8 @@
+import 'package:dicoding_news_app/common/styles.dart';
 import 'package:dicoding_news_app/data/model/article.dart';
-import 'package:dicoding_news_app/ui/detail_page.dart';
+import 'package:dicoding_news_app/ui/article_detail_page.dart';
+import 'package:dicoding_news_app/ui/article_web_view.dart';
+import 'package:dicoding_news_app/ui/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,61 +15,41 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'News App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: Theme.of(context).colorScheme.copyWith(
+          primary: primaryColor,
+          onPrimary: Colors.black,
+          secondary: secondaryColor,
+        ),
+        scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        textTheme: myTextTheme,
+        appBarTheme: AppBarTheme(elevation: 0),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: secondaryColor,
+          unselectedItemColor: Colors.grey,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: secondaryColor,
+            onPrimary: Colors.white,
+            textStyle: TextStyle(),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(0),
+              ),
+            ),
+          ),
+        ),
       ),
-      initialRoute: NewsListPage.routeName,
+      initialRoute: HomePage.routeName,
       routes: {
-        NewsListPage.routeName: (context) => NewsListPage(),
+        HomePage.routeName: (context) => HomePage(),
         ArticleDetailPage.routeName: (context) => ArticleDetailPage(
           article: ModalRoute.of(context)?.settings.arguments as Article,
         ),
         ArticleWebView.routeName: (context) => ArticleWebView(
           url: ModalRoute.of(context)?.settings.arguments as String,
         ),
-      },
-    );
-  }
-}
-
-class NewsListPage extends StatelessWidget {
-  static const routeName = '/article_list';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('News App'),
-      ),
-      body: FutureBuilder<String>(
-        future:
-        DefaultAssetBundle.of(context).loadString('assets/articles.json'),
-        builder: (context, snapshot) {
-          final List<Article> articles = parseArticles(snapshot.data);
-          return ListView.builder(
-            itemCount: articles.length,
-            itemBuilder: (context, index) {
-              return _buildArticleItem(context, articles[index]);
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildArticleItem(BuildContext context, Article article) {
-    return ListTile(
-      contentPadding:
-      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      leading: Image.network(
-        article.urlToImage,
-        width: 100,
-      ),
-      title: Text(article.title),
-      subtitle: Text(article.author),
-      onTap: () {
-        Navigator.pushNamed(context, ArticleDetailPage.routeName,
-            arguments: article);
       },
     );
   }
